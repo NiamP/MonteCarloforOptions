@@ -25,6 +25,7 @@ def montecarlosim(StockPrice, RFR, V, T, step, N, StrikePrice):
     call_payout = np.maximum(endprices-StrikePrice, 0)
     put_payout = np.maximum(StrikePrice - endprices, 0)
 
+    # Discount payoffs back to present value
     discountedcallpayout = np.exp(-RFR*T) * call_payout
     discountedputpayout = np.exp(-RFR*T)* put_payout
 
@@ -45,7 +46,7 @@ StrikePrice = st.sidebar.number_input('Strike Price of Option',value = 100)
 
 timestep, S_T, callprice, putprice = montecarlosim(currentstockprice,Riskfreerate,Volatility, timetomaturity, 252, NoSims, StrikePrice)
 
-
+# Create figure showing simulations
 plt.figure(figsize=(10,6))
 plt.plot(timestep, S_T, linewidth = 0.5)
 plt.xlabel('Time')
@@ -63,6 +64,7 @@ with column1:
     st.write(f'**Call Price**: {callprice:.2f}')
     st.write(f'**Put Price**: {putprice:.2f}')
 
+# Create a funciton to calculte Black-scholes valuation given the input parameters used in the monte carlo simulation
 def blachscholes(Stockprice, Strikeprice, RiskFreeRate, timetomaturity, Volatility):
     d1 = (np.log(Stockprice/Strikeprice)+ (RiskFreeRate+0.5 * Volatility**2)* timetomaturity)/ (Volatility*np.sqrt(timetomaturity))
     d2 = d1- Volatility * np.sqrt(timetomaturity)
